@@ -6,7 +6,7 @@
 /*   By: emansoor <emansoor@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 08:26:55 by emansoor          #+#    #+#             */
-/*   Updated: 2024/04/30 08:28:11 by emansoor         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:22:36 by emansoor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,12 @@ void	error(t_cmds **cmds, int *pipefds)
 {
 	t_cmds	*command;
 	
-	close(pipefds[READ_END]);
-	close(pipefds[WRITE_END]);
-	free(pipefds);
+	if (pipefds != NULL)
+	{
+		close(pipefds[READ_END]);
+		close(pipefds[WRITE_END]);
+		free(pipefds);
+	}
 	close_files(cmds);
 	command = *cmds;
 	free_array(command->paths);

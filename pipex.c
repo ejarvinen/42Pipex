@@ -6,7 +6,7 @@
 /*   By: emansoor <emansoor@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 08:23:49 by emansoor          #+#    #+#             */
-/*   Updated: 2024/04/30 10:27:53 by emansoor         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:22:09 by emansoor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void	run_commands(t_cmds **cmds, char **envp)
 
 	command = *cmds;
 	pipefds = pipesetup();
+	if (!pipefds)
+		error(cmds, NULL);
 	child_process(cmds, command, pipefds, envp);
 	command = command->next;
 	child_process(cmds, command, pipefds, envp);
