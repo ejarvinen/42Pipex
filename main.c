@@ -6,7 +6,7 @@
 /*   By: emansoor <emansoor@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 06:35:48 by emansoor          #+#    #+#             */
-/*   Updated: 2024/04/30 10:25:04 by emansoor         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:57:26 by emansoor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,9 @@ int	main(int argc, char **argv, char **envp)
 		ft_lstclear_pipex(&cmds, free);
 		return (1);
 	}
-	if (open_files(&cmds, argc, argv) > 0)
-		return (1);
 	add_cmdinfo(&cmds, paths);
+	if (open_files(&cmds, argc, argv) > 0)
+		error(cmds, NULL);
 	run_commands(&cmds, envp);
 	close_files(&cmds);
 	free_array(paths);
