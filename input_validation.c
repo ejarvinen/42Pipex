@@ -6,7 +6,7 @@
 /*   By: emansoor <emansoor@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:30:06 by emansoor          #+#    #+#             */
-/*   Updated: 2024/04/30 10:26:21 by emansoor         ###   ########.fr       */
+/*   Updated: 2024/05/05 13:56:54 by emansoor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,29 @@ char	*full_path(char *path, char *command)
 
 	temp = ft_strjoin(path, "/");
 	if (!temp)
-	{
-		ft_putstr_fd("Failed to join strings", 2);
 		return (NULL);
-	}
 	full_path = ft_strjoin(temp, command);
 	if (!path)
 	{
-		ft_putstr_fd("Failed to join strings", 2);
 		free(temp);
 		return (NULL);
 	}
+	free(temp);
 	return (full_path);
 }
 
 /*
 checks whether the calling process can access path for a given command;
-returns index for accessible path in paths, -1 if path not found
+returns index for accessible path in paths, -1 if path not found,
+-2 if given command is an absolute path
 */
 static int	validate_command(char *command, char **paths)
 {
 	char	*path;
 	int		index;
 
+	if (access(command, F_OK) == 0)
+		return (-2);
 	index = 0;
 	while (paths[index])
 	{
@@ -65,13 +65,14 @@ static int	validate_command(char *command, char **paths)
 /*
 initializes and adds a new node to the command list
 */
-static int	build_command_list(t_cmds **cmds, char **cmd, char **paths)
+static int	build_command_list(t_cmds **cmds, char **cmd,
+char **paths, int pindex)
 {
 	t_cmds	*new;
 	t_cmds	*last;
 	int		index;
 
-	new = ft_lstnew_pipex(cmd, *paths);
+	new = ft_lstnew_pipex(cmd, paths, pindex);
 	if (!new)
 		return (1);
 	ft_lstadd_back_pipex(cmds, new);
@@ -94,13 +95,14 @@ int	collect_commands(int argc, char **argv, t_cmds **cmds, char **paths)
 	while (index < argc - 1)
 	{
 		cmd = ft_split(argv[index], ' ');
-		if (!cmd)
+		if (substrlen(cmd) == 0)
 		{
-			perror("ft_split");
+			perror(NULL);
+			free(cmd);
 			return (1);
 		}
 		path = validate_command(cmd[0], paths);
-		if (path >= 0 && build_command_list(cmds, cmd, paths + path) == 0)
+		if (build_command_list(cmds, cmd, paths, path) == 0)
 			index++;
 		else
 		{

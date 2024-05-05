@@ -6,7 +6,7 @@
 /*   By: emansoor <emansoor@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 06:35:48 by emansoor          #+#    #+#             */
-/*   Updated: 2024/04/30 12:57:26 by emansoor         ###   ########.fr       */
+/*   Updated: 2024/05/05 13:41:59 by emansoor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	**path_finder(char **envp)
 	paths = ft_split(envp[index] + 5, ':');
 	if (!paths)
 	{
-		perror("ft_split");
+		perror(NULL);
 		return (NULL);
 	}
 	return (paths);
@@ -47,14 +47,14 @@ static int	open_files(t_cmds **cmds, int argc, char **argv)
 	t_cmds	*last;
 
 	command = *cmds;
-	command->fd_infile = open(argv[1], O_RDONLY, 0777);
+	command->fd_infile = open(argv[1], O_RDONLY, 0666);
 	if (command->fd_infile < 0)
 	{
 		perror("open");
 		return (1);
 	}
 	last = ft_lstlast_pipex(*cmds);
-	last->fd_outfile = open(argv[argc - 1], O_WRONLY | O_CREAT, 0777);
+	last->fd_outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (last->fd_outfile < 0)
 	{
 		perror("open");
@@ -84,7 +84,7 @@ void	close_files(t_cmds **cmds)
 /*
 adds the number of pipes to each command's struct
 */
-static void	add_cmdinfo(t_cmds **cmds, char **paths)
+static void	add_cmdinfo(t_cmds **cmds)
 {
 	t_cmds	*command;
 	int		nbr_of_cmds;
@@ -94,15 +94,6 @@ static void	add_cmdinfo(t_cmds **cmds, char **paths)
 	while (command)
 	{
 		command->commands = nbr_of_cmds;
-		command = command->next;
-	}
-	command = *cmds;
-	while (command)
-	{
-		if (command->id == 0)
-			command->paths = paths;
-		else
-			command->paths = NULL;
 		command = command->next;
 	}
 }
@@ -127,12 +118,13 @@ int	main(int argc, char **argv, char **envp)
 		ft_lstclear_pipex(&cmds, free);
 		return (1);
 	}
-	add_cmdinfo(&cmds, paths);
-	if (open_files(&cmds, argc, argv) > 0)
-		error(cmds, NULL);
-	run_commands(&cmds, envp);
-	close_files(&cmds);
 	free_array(paths);
+	add_cmdinfo(&cmds);
+	if (open_files(&cmds, argc, argv) > 0)
+		error(&cmds, NULL, 1);
+	run_commands(&cmds, envp);
+	printf("do I ever get here\n");
+	close_files(&cmds);
 	ft_lstclear_pipex(&cmds, free);
 	return (0);
 }

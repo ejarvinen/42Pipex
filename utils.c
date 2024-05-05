@@ -6,7 +6,7 @@
 /*   By: emansoor <emansoor@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 08:26:55 by emansoor          #+#    #+#             */
-/*   Updated: 2024/04/30 12:22:36 by emansoor         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:10:46 by emansoor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 /*
 returns the number of substrings in 2D array
 */
-int substrlen(char **array)
+int	substrlen(char **array)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (*array)
@@ -27,12 +27,13 @@ int substrlen(char **array)
 	}
 	return (len);
 }
+
 /*
 frees a 2D array
 */
-void free_array(char **array)
+void	free_array(char **array)
 {
-	int index;
+	int	index;
 
 	index = 0;
 	while (array[index])
@@ -42,6 +43,7 @@ void free_array(char **array)
 	}
 	free(array);
 }
+
 /*
 finds a command from cmds according to given index
 */
@@ -84,10 +86,11 @@ int	*pipesetup(void)
 	return (pipefds);
 }
 
-void	error(t_cmds **cmds, int *pipefds)
+/*
+closes any open filedescriptors and frees all allocated space
+*/
+void	error(t_cmds **cmds, int *pipefds, int exitcode)
 {
-	t_cmds	*command;
-	
 	if (pipefds != NULL)
 	{
 		close(pipefds[READ_END]);
@@ -95,8 +98,6 @@ void	error(t_cmds **cmds, int *pipefds)
 		free(pipefds);
 	}
 	close_files(cmds);
-	command = *cmds;
-	free_array(command->paths);
 	ft_lstclear_pipex(cmds, free);
-	exit(1);
+	exit(exitcode);
 }

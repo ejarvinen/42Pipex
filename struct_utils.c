@@ -6,7 +6,7 @@
 /*   By: emansoor <emansoor@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 13:24:07 by emansoor          #+#    #+#             */
-/*   Updated: 2024/04/30 10:29:37 by emansoor         ###   ########.fr       */
+/*   Updated: 2024/05/05 13:20:23 by emansoor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 creates a new node with given input
 */
-t_cmds	*ft_lstnew_pipex(char **cmd, char *path)
+t_cmds	*ft_lstnew_pipex(char **cmd, char **paths, int index)
 {
 	t_cmds	*new_node;
 
@@ -23,7 +23,10 @@ t_cmds	*ft_lstnew_pipex(char **cmd, char *path)
 	if (new_node)
 	{
 		new_node->command = cmd;
-		new_node->path = full_path(path, cmd[0]);
+		if (index < 0)
+			new_node->path = ft_strdup(cmd[0]);
+		else
+			new_node->path = full_path(paths[index], cmd[0]);
 		if (!new_node->path)
 		{
 			free(new_node);
