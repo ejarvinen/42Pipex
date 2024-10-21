@@ -10,4 +10,4 @@ Single word commands without arguments or options will not need to be enclosed i
 
 ### Compilation
 
-`git clone` to desired directory. `cd` into that directory and run `make`. Use as demonstrated above.
+`git clone` to desired directory. `cd` into that directory. Run `git submodule init` and `git submodule update` in the same directory and then `make`. Use as demonstrated above.
