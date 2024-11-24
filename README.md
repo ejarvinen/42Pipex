@@ -8,6 +8,7 @@ Behaves like: `< infile ls -l | wc -l > outfile`
 
 Single word commands without arguments or options will not need to be enclosed in quotes.
 
-### Compilation
+## How to run
+_This project has been developed in macOS._
 
-`git clone` to desired directory. `cd` into that directory. Run `git submodule init` and `git submodule update` in the same directory and then `make`. Use as demonstrated above.
+`git clone` and `cd` to desired directory. Run `git submodule init` and `git submodule update` in the same directory and then `make`. Use as demonstrated above.
