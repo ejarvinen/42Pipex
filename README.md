@@ -1,6 +1,6 @@
 # 42Pipex
 
-A program designed to execute two unix commands with input and output redirections as follows:
+A 42 school project of a program designed to execute two unix commands with input and output redirections as follows:
 
 `./pipex infile "ls -l" "wc -l" outfile`
 
