@@ -1,14 +1,42 @@
 # 42Pipex
+## Description
+**Pipex** is a project that explores the inner workings of UNIX pipes by replicating the behavior of shell piping. The program takes in file inputs and commands and executes them through pipes, mimicking the shell's command execution process.
 
-A 42 school project of a program designed to execute two unix commands with input and output redirections as follows:
+## Features
+- Simulates the shell pipeline behavior: `< file1 cmd1 | cmd2 > file2`.
+- Handles file input and output redirections.
+- Supports execution of external commands.
+- Proper error handling and memory management.
 
-`./pipex infile "ls -l" "wc -l" outfile`
-
-Behaves like: `< infile ls -l | wc -l > outfile`
-
-Single word commands without arguments or options will not need to be enclosed in quotes.
-
-## How to run
-_This project has been developed in macOS._
-
-`git clone` and `cd` to desired directory. Run `git submodule init` and `git submodule update` in the same directory and then `make`. Use as demonstrated above.
+## Installation
+1. Clone the repository:
+```
+git clone https://github.com/ejarvinen/42Pipex.git
+cd 42Pipex
+```
+2. Update and initialize submodules:
+```
+git submodule init
+git submodule update
+```
+3. Build the project using the Makefile:
+```
+make
+```
+## Usage
+Run the program with the following syntax:
+```
+./pipex file1 "cmd1" "cmd2" file2
+```
+This will behave like:
+```
+< file1 cmd1 | cmd2 > file2
+```
+### Examples
+```
+./pipex infile "ls -l" "wc -l" outfile
+```
+Equivalent to:
+```
+< infile ls -l | wc -l > outfile
+```
